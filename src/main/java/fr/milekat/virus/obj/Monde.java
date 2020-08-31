@@ -2,6 +2,7 @@ package fr.milekat.virus.obj;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static fr.milekat.virus.Main.debug;
 import static fr.milekat.virus.Main.log;
@@ -14,10 +15,12 @@ public class Monde {
     /**
      *      Init du nouveau monde
      */
-    public Monde(int size, int[] patient0) {
+    public Monde(int size, List<int[]> patients0) {
         this.worldSize = size;
         generateWorld();
-        setPatientToInfecte(patient0[0] , patient0[1]);
+        for (int[] pos : patients0) {
+            setPatientToInfecte(pos[0] , pos[1]);
+        }
     }
 
     /**
@@ -26,7 +29,7 @@ public class Monde {
     private void generateWorld() {
         for (int x = 0;x < this.worldSize;x++) {
             for (int y = 0; y < this.worldSize; y++) {
-                this.placement.put(x + ";" + y, new Patients(false));
+                this.placement.put(x + ";" + y, new Patients(false, new int[] {x,y}));
                 if (debug) log("Patient ajouté en " + x + y + " total de " + getPatientsCount() + " patient(s).");
             }
         }
@@ -37,43 +40,26 @@ public class Monde {
      */
     public void nextStep() {
         ArrayList<String> newInfectes = new ArrayList<>();
-        for (int x = 0 ;x < this.worldSize; x++) {
-            for (int y = 0; y < this.worldSize; y++) {
-                if (debug) log("Check en " + x + ";" + y +".");
-                if (!this.placement.get(x + ";" + y).isInfecte()) {
-                    /* Check des patients adjacents, si infecté, alors le patient devient lui même infecté */
-                    if (x - 1 >= 0 && this.placement.get((x - 1) + ";" + y).isInfecte()) {
-                        newInfectes.add(x + ";" + y);
-                    } else if (x + 1 <= this.worldSize-1 && this.placement.get((x + 1) + ";" + y).isInfecte()) {
-                        newInfectes.add(x + ";" + y);
-                    } else if (y - 1 >= 0 && this.placement.get(x + ";" + (y - 1)).isInfecte()) {
-                        newInfectes.add(x + ";" + y);
-                    } else if (y + 1 <= this.worldSize-1 && this.placement.get(x + ";" + (y + 1)).isInfecte()) {
-                        newInfectes.add(x + ";" + y);
-                    }
-                } else {
-                    if (debug) log("Le patient est infecté.");
+        for (Patients patients : this.placement.values()) {
+            int x = patients.getPosition()[0];
+            int y = patients.getPosition()[1];
+            if (debug) log("Check du patient en " + x + ";" + y +".");
+            if (!patients.isInfecte()) {
+                if (x - 1 >= 0 && this.placement.get((x - 1) + ";" + y).isInfecte()) {
+                    newInfectes.add(x + ";" + y);
+                } else if (x + 1 <= this.worldSize-1 && this.placement.get((x + 1) + ";" + y).isInfecte()) {
+                    newInfectes.add(x + ";" + y);
+                } else if (y - 1 >= 0 && this.placement.get(x + ";" + (y - 1)).isInfecte()) {
+                    newInfectes.add(x + ";" + y);
+                } else if (y + 1 <= this.worldSize-1 && this.placement.get(x + ";" + (y + 1)).isInfecte()) {
+                    newInfectes.add(x + ";" + y);
                 }
+            } else {
+                if (debug) log("Le patient est infecté.");
             }
         }
         for (String pos : newInfectes) {
             setPatientToInfecte(pos);
-        }
-    }
-
-    /**
-     *      Méthode pour afficher la carte du monde
-     */
-    public void displayWorld() {
-        for (int x = 0 ;x < this.worldSize; x++) {
-            for (int y = 0; y < this.worldSize; y++) {
-                if (this.placement.get(x + ";" + y).isInfecte()) {
-                    System.out.print("X");
-                } else {
-                    System.out.print("O");
-                }
-            }
-            System.out.println();
         }
     }
 
@@ -113,5 +99,21 @@ public class Monde {
      */
     public int getInfectes() {
         return infectes;
+    }
+
+    /**
+     *      Méthode pour afficher la carte du monde (Mode Débug)
+     */
+    public void displayWorld() {
+        for (int x = 0 ;x < this.worldSize; x++) {
+            for (int y = 0; y < this.worldSize; y++) {
+                if (this.placement.get(x + ";" + y).isInfecte()) {
+                    System.out.print("X");
+                } else {
+                    System.out.print("O");
+                }
+            }
+            System.out.println();
+        }
     }
 }
