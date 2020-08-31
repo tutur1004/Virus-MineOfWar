@@ -27,7 +27,7 @@ public class Monde {
         for (int x = 0;x < this.worldSize;x++) {
             for (int y = 0; y < this.worldSize; y++) {
                 this.placement.put(x + ";" + y, new Patients(false));
-                if (debug) log("Patient ajouté en " + x + y + " total de " + getPatientsCount() + " patient(s)");
+                if (debug) log("Patient ajouté en " + x + y + " total de " + getPatientsCount() + " patient(s).");
             }
         }
     }
@@ -39,7 +39,7 @@ public class Monde {
         ArrayList<String> newInfectes = new ArrayList<>();
         for (int x = 0 ;x < this.worldSize; x++) {
             for (int y = 0; y < this.worldSize; y++) {
-                if (debug) log("Check en " + x + ";" + y);
+                if (debug) log("Check en " + x + ";" + y +".");
                 if (!this.placement.get(x + ";" + y).isInfecte()) {
                     /* Check des patients adjacents, si infecté, alors le patient devient lui même infecté */
                     if (x - 1 >= 0 && this.placement.get((x - 1) + ";" + y).isInfecte()) {
@@ -52,7 +52,7 @@ public class Monde {
                         newInfectes.add(x + ";" + y);
                     }
                 } else {
-                    if (debug) log("Le patient est infecté");
+                    if (debug) log("Le patient est infecté.");
                 }
             }
         }

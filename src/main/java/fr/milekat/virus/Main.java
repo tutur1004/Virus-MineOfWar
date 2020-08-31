@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) {
         if (args.length >=1) debug = true;
         Scanner scanner = new Scanner(System.in);
-        log("Définissez la taille du monde 'monde1':");
+        log("Définissez la taille du monde :");
         String input = scanner.nextLine();
         if (tools.isInt(input)) {
             int size = Integer.parseInt(input);
@@ -44,7 +44,7 @@ public class Main {
         int y;
         String input;
         Scanner scanner = new Scanner(System.in);
-        log("Ou est le patient 0 ? (Coordonnées X)");
+        log("Ou est le patient 0 ? (Coordonnée X)");
         input = scanner.nextLine();
         if (tools.isInt(input) && Integer.parseInt(input) <= size) {
             x = Integer.parseInt(input);
@@ -52,7 +52,7 @@ public class Main {
             log("Merci de choisir un nombre entier suppérieur ou égual à 0 et inférieur à " + size + ".");
             return;
         }
-        log("Ou est le patient 0 ? (Coordonnées Y)");
+        log("Ou est le patient 0 ? (Coordonnée Y)");
         input = scanner.nextLine();
         if (tools.isInt(input) && Integer.parseInt(input) <= size) {
             y = Integer.parseInt(input);
